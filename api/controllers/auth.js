@@ -25,9 +25,11 @@ export const signin = async (req, res) => {
         if (!isCorrect) return next(createError(400, "Incorrect password!"))
 
         const token = jwt.sign({ id: user._id }, process.env.JWT)
-        const { password, ...others } = user._doc 
+        // seperates user password from other details
+        const { password, ...others } = user._doc;
 
         res.cookie("acess_token", token, {
+            // third party scripts won't be able to use cookies
             httpOnly: true
         })
             .status(200)

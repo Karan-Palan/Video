@@ -32,7 +32,7 @@ app.use((err, req, res, next) => {
     return res.status(status).json({
         sucess: false,
         status: status,
-        message
+        message   
     })
 })
 
