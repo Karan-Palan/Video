@@ -58,7 +58,7 @@ export const getVideo = async (req, res, next) => {
 
 export const random = async (req, res, next) => {
     try {
-        const videos = await Video.aggregate([{$sample:{ size : 40}}])
+        const videos = await Video.aggregate([{ $sample: { size: 40 } }])
         res.status(200).json(videos)
     } catch (err) {
         next(err)
@@ -67,7 +67,7 @@ export const random = async (req, res, next) => {
 
 export const trend = async (req, res, next) => {
     try {
-        const videos = await Video.find().sort({views:-1})
+        const videos = await Video.find().sort({ views: -1 })
         res.status(200).json(videos)
     } catch (err) {
         next(err)
@@ -78,8 +78,11 @@ export const sub = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id)
         const subscribedChannels = user.subscribedUsers;
-        const list = Promise.all(
-            
+        // find all channels
+        const list = await Promise.all(
+            subscribedChannels.map((channelId) => {
+                return Video.find({ userId: channelId })
+            })
         )
     } catch (err) {
         next(err)
